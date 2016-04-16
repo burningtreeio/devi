@@ -1,4 +1,6 @@
 const debug = require('debug')('devi:savePixmap');
+import { mkdirSync } from 'mkdir-recursive';
+import { dirname } from 'path';
 
 import { PNG } from 'pngjs';
 import { createWriteStream } from 'fs';
@@ -24,6 +26,10 @@ export default (pixmap, outfile) => {
     if (pixmap.width > 0 && pixmap.height > 0) {
         png.data = pixmap.pixels;
     }
+
+    // Ensure parent dir exists
+    const saveDir = dirname(outfile);
+    mkdirSync(saveDir);
 
     // Save
     debug(`writing ${outfile}`);

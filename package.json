@@ -24,6 +24,7 @@
   "generator-core-version": "~3",
   "dependencies": {
     "debug": "^2.2.0",
+    "mkdir-recursive": "^0.2.1",
     "pngjs": "^2.2.0"
   },
   "devDependencies": {
