@@ -1,0 +1,32 @@
+{
+  "name": "devi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "adobe",
+    "photoshop",
+    "generator"
+  ],
+  "files": [
+    "build"
+  ],
+  "babel": {
+    "presets": [
+      "modern-node/5.9"
+    ]
+  },
+  "author": "Michael Contento <michael@burningtree.io>",
+  "license": "MIT",
+  "generator-core-version": "~3",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "pngjs": "^2.2.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.7.5"
+  }
+}
