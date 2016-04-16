@@ -1,4 +1,5 @@
 const debug = require('debug')('devi:PsApi');
+import { join } from 'path';
 
 import Document from './Document';
 import DocumentStore from './DocumentStore';
@@ -59,7 +60,7 @@ export default class {
         this._store.setCurrent(doc.id);
     }
 
-    async saveLayerToFile(docId, rootLayer, hiddenLayerIds = [], opts = {}) {
+    async saveLayerToFile(doc, rootLayer, hiddenLayerIds = [], opts = {}) {
         // Exit early
         if (!rootLayer.visible) {
             return;
@@ -84,11 +85,11 @@ export default class {
         const allIdx = [...showIdx, ...hideIdx];
         const firstLayerIndex = Math.min(...allIdx);
         const lastLayerIndex = Math.max(...allIdx);
-        const pixmap = await this._generator.getPixmap(docId, {
+        const pixmap = await this._generator.getPixmap(doc.id, {
             firstLayerIndex, lastLayerIndex, hidden: hideIdx
         }, opts);
 
         // And finally save it
-        savePixmap(pixmap, __dirname + `/${docId}-${rootLayer.id}.png`);
+        savePixmap(pixmap, join(doc.dirname, doc.name, `${doc.id}-${rootLayer.id}.png`));
     }
 }

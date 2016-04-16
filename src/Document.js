@@ -46,7 +46,7 @@ export default class {
         const hidden = (layer.layers || [])
             .filter(({ name }) => this._isRenderName(name))
             .map(({ id }) => id );
-        await this._psApi.saveLayerToFile(this.id, layer, hidden);
+        await this._psApi.saveLayerToFile(this, layer, hidden);
     }
 
     _isRenderName(name) {
