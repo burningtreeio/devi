@@ -1,4 +1,5 @@
 const debug = require('debug')('devi:Document');
+import { basename, dirname } from 'path';
 
 import Document from './Document';
 import DocumentStore from './DocumentStore';
@@ -17,6 +18,14 @@ export default class {
 
     get id() {
         return this._raw.id;
+    }
+
+    get dirname() {
+        return dirname(this._raw.file);
+    }
+
+    get name() {
+        return basename(this._raw.file).replace(/\.psd$/i, '');
     }
 
     async onChange(event) {
