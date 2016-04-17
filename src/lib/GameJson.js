@@ -109,8 +109,8 @@ export default class {
 
         if (parent) {
             const isEmpty = this._emptyBounds(layer.bounds);
-            const x = isEmpty ? 0 : layer.bounds.top - parent.bounds.top;
-            const y = isEmpty ? 0 : layer.bounds.left - parent.bounds.left;
+            const x = isEmpty ? 0 : layer.bounds.left - parent.bounds.left;
+            const y = isEmpty ? 0 : layer.bounds.top - parent.bounds.top;
             child.position = {
                 origin: 'parent',
                 x: `${x}px`,
