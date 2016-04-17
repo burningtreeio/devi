@@ -1,4 +1,4 @@
-import PsApi from './PsApi';
+import PsApi from './lib/PsApi';
 
 export async function init(generator, config) {
     const ps = new PsApi(generator, config);
