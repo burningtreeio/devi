@@ -47,9 +47,10 @@ export default class {
         debug(`onChange ${this.id}`);
         await this._psApi.updateDocument(this);
 
-        const changedLayerIds = (event.layers || [])
+        const jobs = (event.layers || [])
             .map(({ id }) => id)
-            .forEach(::this._onChangeLayer);
+            .map(::this._onChangeLayer);
+        await Promise.all(jobs);
     }
 
     async _onChangeLayer(layerId)  {

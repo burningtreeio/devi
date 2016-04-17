@@ -28,16 +28,19 @@ export default class {
         if (!this._store.has(docId)) {
             debug(`onImageChanged missing document ${docId} - skipped`);
         } else {
-            this._store.get(docId).onChange(event);
+            this._store.get(docId)
+                .onChange(event)
+                .catch(::console.error);
         }
     }
 
-    async _onCurrentDocumentChanged(docId) {
+    _onCurrentDocumentChanged(docId) {
         debug(`onCurrentDocumentChanged ${docId}`);
 
         if (!this._store.has(docId)) {
-            const doc = await this.loadDocumentById(docId);
-            this._store.add(doc);
+            this.loadDocumentById(docId)
+                .then(::this._store.add)
+                .catch(::console.error);
         }
         this._store.setCurrent(docId);
     }
