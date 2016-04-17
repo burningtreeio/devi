@@ -61,16 +61,11 @@ export default class {
     }
 
     async saveLayerToFile(doc, rootLayer, hiddenLayerIds = [], opts = {}) {
-        // Exit early
-        if (!rootLayer.visible) {
-            return;
-        }
-
         // Collect all layer indices
         const showIdx = [];
         const hideIdx = [];
         const reduce = (layer, hidden = false) => {
-            if (hidden || !layer.visible || hiddenLayerIds.indexOf(layer.id) !== -1) {
+            if (hidden || hiddenLayerIds.indexOf(layer.id) !== -1) {
                 hidden = true;
                 hideIdx.push(layer.index);
             } else {
