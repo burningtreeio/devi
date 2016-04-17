@@ -20,12 +20,24 @@ export default class {
         return this._raw.id;
     }
 
+    get filename() {
+        return this._raw.file;
+    }
+
     get dirname() {
         return dirname(this._raw.file);
     }
 
     get name() {
         return basename(this._raw.file).replace(/\.psd$/i, '');
+    }
+
+    get width() {
+        return this._raw.bounds.right;
+    }
+
+    get height() {
+        return this._raw.bounds.bottom;
     }
 
     async onChange(event) {
