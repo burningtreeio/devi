@@ -1,11 +1,24 @@
 const debug = require('debug')('devi:savePixmap');
-import { mkdirSync } from 'mkdir-recursive';
+import { createWriteStream, unlinkSync } from 'fs';
 import { dirname } from 'path';
-
+import { mkdirSync } from 'mkdir-recursive';
 import { PNG } from 'pngjs';
-import { createWriteStream } from 'fs';
 
 export default (pixmap, outfile) => {
+    // Ensure parent dir exists
+    const saveDir = dirname(outfile);
+    mkdirSync(saveDir);
+
+    // Remove empty images
+    if (pixmap.width === 0 || pixmap.height === 0) {
+        try {
+            unlinkSync(outfile);
+        } catch (err) {
+            // don't throw if the file didn't even exists
+        }
+        return false;
+    }
+
     // Convert from ARGB to RGBA, we do this every 4 pixel values (channelCount)
     const pixels = pixmap.pixels;
     for (let i = 0; i < pixels.length; i += pixmap.channelCount) {
@@ -17,21 +30,11 @@ export default (pixmap, outfile) => {
     }
 
     // Init a new PNG
-    var png = new PNG({
-        // Note: 1x1 px are required to save empty PNGs for empty groups
-        width: Math.max(1, pixmap.width),
-        height: Math.max(1, pixmap.height)
-    });
-    // Note: PNGJS is not very happy about a empty buffer ...
-    if (pixmap.width > 0 && pixmap.height > 0) {
-        png.data = pixmap.pixels;
-    }
-
-    // Ensure parent dir exists
-    const saveDir = dirname(outfile);
-    mkdirSync(saveDir);
+    var png = new PNG({ width: pixmap.width, height: pixmap.height });
+    png.data = pixmap.pixels;
 
     // Save
     debug(`writing ${outfile}`);
     png.pack().pipe(createWriteStream(outfile));
+    return true;
 };

@@ -89,7 +89,7 @@ export default class {
 
         // And finally save it
         const filename = join(doc.dirname, doc.name, `${doc.id}-${rootLayer.id}.png`);
-        savePixmap(pixmap, filename);
-        return filename;
+        const written = savePixmap(pixmap, filename);
+        return written ? filename : null;
     }
 }
