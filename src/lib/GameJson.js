@@ -101,8 +101,8 @@ export default class {
             visible: layer.visible,
             position: {
                 origin: 'world',
-                x: `${layer.bounds.top}px`,
-                y: `${layer.bounds.left}px`
+                x: `${layer.bounds.left}px`,
+                y: `${layer.bounds.top}px`
             }
         };
 
