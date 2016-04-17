@@ -3,6 +3,7 @@ import { basename, dirname } from 'path';
 
 import Document from './Document';
 import DocumentStore from './DocumentStore';
+import GameJson from './GameJson';
 
 export default class {
     constructor(psApi, rawDoc) {
@@ -10,6 +11,7 @@ export default class {
         this._raw = rawDoc;
 
         debug(`create ${this.id}`);
+        this._json = new GameJson(this);
     }
 
     update(rawDoc) {
@@ -50,7 +52,7 @@ export default class {
     }
 
     async _onChangeLayer(layerId, ...x)  {
-        const layer = this._getLayer(layerId);
+        const layer = this.getLayer(layerId);
         if (!this._isRenderName(layer.name)) {
             return;
         }
@@ -58,14 +60,16 @@ export default class {
         const hidden = (layer.layers || [])
             .filter(({ name }) => this._isRenderName(name))
             .map(({ id }) => id );
-        await this._psApi.saveLayerToFile(this, layer, hidden);
+        const filename = await this._psApi.saveLayerToFile(this, layer, hidden);
+
+        this._json.addObject(layer, filename);
     }
 
     _isRenderName(name) {
         return name.startsWith('object: ');
     }
 
-    _getLayer(layerId) {
+    getLayer(layerId) {
         const recurse = (layer) => {
             if (layer.id === layerId) {
                 return layer;
