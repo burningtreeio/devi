@@ -31,12 +31,14 @@ export default class {
     }
 
     addObject(layer, filename) {
+        const width = Math.abs(layer.bounds.right - layer.bounds.left);
+        const height = Math.abs(layer.bounds.bottom - layer.bounds.top);
         const obj = {
             type: 'object',
             name: layer.name.replace(/^[^:]+: ?/, ''),
             dimension: {
-                width: Math.abs(layer.bounds.right - layer.bounds.left),
-                height: Math.abs(layer.bounds.bottom - layer.bounds.top),
+                width: `${width}px`,
+                height: `${height}px`
             },
             properties: {},
             children: [] // see this._updateChildren()
