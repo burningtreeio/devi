@@ -51,6 +51,7 @@ export default class {
         }
 
         const id = this._getLayerId(layer);
+        obj.id = id;
         this._state.objects[id] = obj;
         debug(`addObject ${id}`);
 
