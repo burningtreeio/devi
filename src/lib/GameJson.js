@@ -47,8 +47,15 @@ export default class {
             obj.filename = basename(filename);
         }
 
-        this._state.objects[layer.id] = obj;
+        const id = this._getLayerId(layer);
+        this._state.objects[id] = obj;
+        debug(`addObject ${id}`);
+
         this.save();
+    }
+
+    _getLayerId(layer) {
+        return '' + layer.id;
     }
 
     /**
@@ -66,6 +73,8 @@ export default class {
     }
 
     save() {
+        // Update state
+        debug(`saving ${this._doc.id}`);
         this._setDimension();
         this._updateChildren();
         this._state.devi.updatedAt = (new Date()).toISOString();

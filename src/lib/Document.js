@@ -15,6 +15,7 @@ export default class {
     }
 
     update(rawDoc) {
+        debug(`update ${this.id}`);
         this._raw = rawDoc;
     }
 
@@ -51,7 +52,7 @@ export default class {
             .forEach(::this._onChangeLayer);
     }
 
-    async _onChangeLayer(layerId, ...x)  {
+    async _onChangeLayer(layerId)  {
         const layer = this.getLayer(layerId);
         if (!this._isRenderName(layer.name)) {
             return;
