@@ -34,6 +34,7 @@ export default class {
         const width = Math.abs(layer.bounds.right - layer.bounds.left);
         const height = Math.abs(layer.bounds.bottom - layer.bounds.top);
         const obj = {
+            _getLayer: () => layer,
             type: 'object',
             name: layer.name.replace(/^[^:]+: ?/, ''),
             dimension: {
@@ -67,11 +68,55 @@ export default class {
      * would be a bug :-)
      */
     _updateChildren() {
-        // for (const id of Object.keys(this._state.objects)) {
-        //     const obj = this._state.objects[id];
-        //     const layer = this._doc.getLayer(id);
-        //     debug(obj);
-        // }
+        this._updateRootChildren();
+        this._updateObjectChildren();
+    }
+
+    _updateRootChildren() {
+        debug('update root children');
+        this._state.children = [];
+        this._doc.getObjectLayers(this._doc._raw).forEach((layer) => {
+            const child = this._formatAsChild(layer);
+            this._state.children.push(child);
+        });
+    }
+
+    _updateObjectChildren() {
+        debug(`update object children`);
+        for (const id of Object.keys(this._state.objects)) {
+            const object = this._state.objects[id];
+            object.children = [];
+
+            const searchLayer = object._getLayer();
+            this._doc.getObjectLayers(searchLayer).forEach((layer) => {
+                const child = this._formatAsChild(layer, searchLayer);
+                object.children.push(child);
+            });
+        }
+    }
+
+    _formatAsChild(layer, parent = null) {
+        const child = {
+            objectId: this._getLayerId(layer),
+            visible: layer.visible,
+            position: {
+                origin: 'world',
+                x: `${layer.bounds.top}px`,
+                y: `${layer.bounds.left}px`
+            }
+        };
+
+        if (parent) {
+            const x = layer.bounds.top - parent.bounds.top;
+            const y = layer.bounds.left - parent.bounds.left;
+            child.position = {
+                origin: 'parent',
+                x: `${x}px`,
+                y: `${y}px`
+            };
+        }
+
+        return child;
     }
 
     save() {

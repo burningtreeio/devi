@@ -70,6 +70,20 @@ export default class {
         return name.startsWith('object: ');
     }
 
+    getObjectLayers(searchLayer) {
+        const layers = [];
+        const recurse = (layer) => {
+            if (this._isRenderName(layer.name || '')) {
+                layers.push(layer);
+            } else {
+                (layer.layers || []).forEach(recurse);
+            }
+        }
+
+        (searchLayer.layers || []).forEach(recurse);
+        return layers;
+    }
+
     getLayer(layerId) {
         const recurse = (layer) => {
             if (layer.id === layerId) {
